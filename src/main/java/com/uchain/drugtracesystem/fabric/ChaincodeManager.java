@@ -1,11 +1,15 @@
 package com.uchain.drugtracesystem.fabric;
 
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.uchain.drugtracesystem.fabric.bean.Chaincode;
 import com.uchain.drugtracesystem.fabric.bean.Orderers;
 import com.uchain.drugtracesystem.fabric.bean.Peers;
 import com.uchain.drugtracesystem.result.Result;
+import io.grpc.StatusRuntimeException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.hyperledger.fabric.sdk.*;
 import org.hyperledger.fabric.sdk.exception.CryptoException;
@@ -16,6 +20,7 @@ import org.hyperledger.fabric.sdk.security.CryptoSuite;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
@@ -30,9 +35,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 /**
  * 只能合约操作总控制器
  */
+@Slf4j
 public class ChaincodeManager {
 
-    private static Logger log = Logger.getLogger(ChaincodeManager.class);
 
     private FabricConfig config;
     private Orderers orderers;
@@ -44,8 +49,9 @@ public class ChaincodeManager {
     private Channel channel;
     private ChaincodeID chaincodeID;
 
-    public ChaincodeManager(FabricConfig fabricConfig)
-            throws CryptoException, InvalidArgumentException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, IOException, TransactionException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    private Integer proposalWaitTime = 20000;
+
+    public ChaincodeManager(FabricConfig fabricConfig)throws Exception{
         this.config = fabricConfig;
 
         orderers = this.config.getOrderers();
@@ -69,7 +75,7 @@ public class ChaincodeManager {
     /**
      * 获取FaricOrg组织信息
      */
-    private FabricOrg getFabricOrg() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, IOException {
+    private FabricOrg getFabricOrg() throws Exception{
 
         // java.io.tmpdir : C:\Users\yangyi47\AppData\Local\Temp\
         File storeFile = new File(System.getProperty("java.io.tmpdir") + "/HFCSampletest.properties");
@@ -82,14 +88,12 @@ public class ChaincodeManager {
         return fabricOrg;
     }
 
-    private Channel getChannel()
-            throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, IOException, CryptoException, InvalidArgumentException, TransactionException {
+    private Channel getChannel() throws Exception{
         client.setUserContext(fabricOrg.getPeerAdmin());
         return getChannel(fabricOrg, client);
     }
 
-    private Channel getChannel(FabricOrg fabricOrg, HFClient client)
-            throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, IOException, CryptoException, InvalidArgumentException, TransactionException {
+    private Channel getChannel(FabricOrg fabricOrg, HFClient client) throws Exception{
         Channel channel = client.newChannel(chaincode.getChannelName());
         log.debug("Get Chain " + chaincode.getChannelName());
 
@@ -194,10 +198,8 @@ public class ChaincodeManager {
      * @throws NoSuchProviderException
      * @throws NoSuchAlgorithmException
      */
-    public Map<String, String> invoke(String fcn, String[] args)
-            throws InvalidArgumentException, ProposalException, InterruptedException, ExecutionException, TimeoutException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, CryptoException, TransactionException, IOException {
-        Map<String, String> resultMap = new HashMap<>();
-
+    public JSONObject invoke(String fcn, String[] args) throws Exception{
+        JSONObject jsonObject = new JSONObject();
         Collection<ProposalResponse> successful = new LinkedList<>();
         Collection<ProposalResponse> failed = new LinkedList<>();
 
@@ -232,9 +234,9 @@ public class ChaincodeManager {
             ProposalResponse firstTransactionProposalResponse = failed.iterator().next();
             log.error("Not enough endorsers for inspect:" + failed.size() + " endorser error: " + firstTransactionProposalResponse.getMessage() + ". Was verified: "
                     + firstTransactionProposalResponse.isVerified());
-            resultMap.put("code", "error");
-            resultMap.put("data", firstTransactionProposalResponse.getMessage());
-            return resultMap;
+            jsonObject.put("code",9999);
+            jsonObject.put("error",firstTransactionProposalResponse.getMessage());
+            return jsonObject;
         } else {
             log.info("Successfully received transaction proposal responses.");
             ProposalResponse resp = transactionPropResp.iterator().next();
@@ -245,9 +247,10 @@ public class ChaincodeManager {
             }
             log.info("resultAsString = " + resultAsString);
             channel.sendTransaction(successful);
-            resultMap.put("code", "success");
-            resultMap.put("data", resultAsString);
-            return resultMap;
+            jsonObject = parseResult(resultAsString);
+            jsonObject.put("code",200);
+            jsonObject.put("txid",resp.getTransactionID());
+            return jsonObject;
         }
 
 //        channel.sendTransaction(successful).thenApply(transactionEvent -> {
@@ -278,35 +281,77 @@ public class ChaincodeManager {
      * @throws NoSuchProviderException
      * @throws NoSuchAlgorithmException
      */
-    public Result query(String fcn, String[] args) throws InvalidArgumentException, ProposalException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, CryptoException, TransactionException, IOException {
-        Result<String> result = new Result();
-        String payload = "";
+    public JSONObject query(String fcn, String[] args) throws Exception{
         QueryByChaincodeRequest queryByChaincodeRequest = client.newQueryProposalRequest();
         queryByChaincodeRequest.setArgs(args);
         queryByChaincodeRequest.setFcn(fcn);
         queryByChaincodeRequest.setChaincodeID(chaincodeID);
+        queryByChaincodeRequest.setProposalWaitTime(proposalWaitTime);
 
         Map<String, byte[]> tm2 = new HashMap<>();
         tm2.put("HyperLedgerFabric", "QueryByChaincodeRequest:JavaSDK".getBytes(UTF_8));
         tm2.put("method", "QueryByChaincodeRequest".getBytes(UTF_8));
         queryByChaincodeRequest.setTransientMap(tm2);
 
-        Collection<ProposalResponse> queryProposals = channel.queryByChaincode(queryByChaincodeRequest, channel.getPeers());
-        for (ProposalResponse proposalResponse : queryProposals) {
-            if (!proposalResponse.isVerified() || proposalResponse.getStatus() != ProposalResponse.Status.SUCCESS) {
-                log.debug("Failed query proposal from peer " + proposalResponse.getPeer().getName() + " status: " + proposalResponse.getStatus() + ". Messages: "
-                        + proposalResponse.getMessage() + ". Was verified : " + proposalResponse.isVerified());
-                result.setMsg("error");
-                result.setData("Failed query proposal from peer " + proposalResponse.getPeer().getName() + " status: " + proposalResponse.getStatus() + ". Messages: "
-                        + proposalResponse.getMessage() + ". Was verified : " + proposalResponse.isVerified());
-            } else {
-                payload = proposalResponse.getProposalResponse().getResponse().getPayload().toStringUtf8();
-                log.debug("Query payload from peer: " + proposalResponse.getPeer().getName());
-                log.debug("" + payload);
-                return result.success(payload);
-            }
-        }
-        return result;
+        long currentStart = System.currentTimeMillis();
+        Collection<ProposalResponse> queryProposalResponses = new ArrayList<>();
+        queryProposalResponses = channel.queryByChaincode(queryByChaincodeRequest, channel.getPeers());
+        log.info("chaincode queryUser transaction proposal time = " + (System.currentTimeMillis() - currentStart));
+        return toPeerResponse(queryProposalResponses, true);
     }
 
+
+    private JSONObject toPeerResponse(Collection<ProposalResponse> proposalResponses, boolean checkVerified) {
+        JSONObject jsonObject = new JSONObject();
+        for (ProposalResponse proposalResponse : proposalResponses) {
+            if ((checkVerified && !proposalResponse.isVerified()) || proposalResponse.getStatus() != ProposalResponse.Status.SUCCESS) {
+                String data = String.format("Failed install/queryUser proposal from peer %s status: %s. Messages: %s. Was verified : %s",
+                        proposalResponse.getPeer().getName(), proposalResponse.getStatus(), proposalResponse.getMessage(), proposalResponse.isVerified());
+                log.debug(data);
+                jsonObject.put("code", 200);
+                jsonObject.put("error", data);
+            } else {
+                String payload = proposalResponse.getProposalResponse().getResponse().getPayload().toStringUtf8();
+                log.info("payload:{}",payload);
+                log.debug("Install/Query payload from peer: " + proposalResponse.getPeer().getName());
+                log.debug("TransactionID: " + proposalResponse.getTransactionID());
+                log.debug("" + payload);
+                jsonObject = parseResult(payload);
+                jsonObject.put("code", 200);
+                jsonObject.put("txid", proposalResponse.getTransactionID());
+            }
+        }
+        return jsonObject;
+    }
+
+    private JSONObject parseResult(String result) {
+        JSONObject jsonObject = new JSONObject();
+        int jsonVerify = isJSONValid(result);
+        switch (jsonVerify) {
+            case 0:
+                jsonObject.put("data", result);
+                break;
+            case 1:
+                jsonObject.put("data", JSONObject.parseObject(result));
+                break;
+            case 2:
+                jsonObject.put("data", JSONObject.parseArray(result));
+                break;
+        }
+        return jsonObject;
+    }
+
+    private static int isJSONValid(String str) {
+        try {
+            JSONObject.parseObject(str);
+            return 1;
+        } catch (JSONException ex) {
+            try {
+                JSONObject.parseArray(str);
+                return 2;
+            } catch (JSONException ex1) {
+                return 0;
+            }
+        }
+    }
 }

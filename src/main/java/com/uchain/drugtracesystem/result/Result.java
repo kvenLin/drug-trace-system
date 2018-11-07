@@ -8,7 +8,7 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Result<T> {
     private Integer code;
-    private String msg;
+    private String message;
     private T data;
 
     public Result() {
@@ -16,7 +16,7 @@ public class Result<T> {
 
     private Result(T data) {
         this.code=0;
-        this.msg="success";
+        this.message ="success";
         this.data = data;
     }
 
@@ -24,7 +24,7 @@ public class Result<T> {
         if (codeMsg==null)
             return;
         this.code = codeMsg.getCode();
-        this.msg = codeMsg.getMsg();
+        this.message = codeMsg.getMsg();
     }
 
     public static <T> Result<T> success(T data){
