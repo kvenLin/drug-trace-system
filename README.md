@@ -57,11 +57,7 @@
 * demo项目只提供接口测试数据的展示
 ### demo展示
 * 用户管理
-![用户管理](https://raw.githubusercontent.com/kvenLin/drug-trace-system/blob/system-for-local-demo/src/main/resources/images/001.png)
+![用户管理](https://github.com/kvenLin/drug-trace-system/blob/system-for-local-demo/src/main/resources/images/001.png)
 
 * 药品管理
 ![药品管理](https://github.com/kvenLin/drug-trace-system/blob/system-for-local-demo/src/main/resources/images/002.png)
-
-
-        
-    
