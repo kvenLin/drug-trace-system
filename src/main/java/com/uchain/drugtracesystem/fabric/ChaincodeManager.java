@@ -60,9 +60,9 @@ public class ChaincodeManager {
 
         //生成一个Hyperledger Fabric的客户端
         client = HFClient.createNewInstance();
-        log.debug("Create instance of HFClient");
+        log.info("Create instance of HFClient");
         client.setCryptoSuite(CryptoSuite.Factory.getCryptoSuite());
-        log.debug("Set Crypto Suite of HFClient");
+        log.info("Set Crypto Suite of HFClient");
 
         //获取FaricOrg组织信息
         fabricOrg = getFabricOrg();
@@ -79,12 +79,13 @@ public class ChaincodeManager {
 
         // java.io.tmpdir : C:\Users\yangyi47\AppData\Local\Temp\
         File storeFile = new File(System.getProperty("java.io.tmpdir") + "/HFCSampletest.properties");
+        log.info("生成文件:"+storeFile.getPath());
         //根据文件创建FabricStore对象
         FabricStore fabricStore = new FabricStore(storeFile);
 
         // Get Org1 from configuration
         FabricOrg fabricOrg = new FabricOrg(peers, orderers, fabricStore, config.getCryptoConfigPath());
-        log.debug("Get FabricOrg");
+        log.info("Get FabricOrg");
         return fabricOrg;
     }
 
@@ -153,12 +154,12 @@ public class ChaincodeManager {
                     // TODO
                     log.debug("========================Event事件监听开始========================");
                     try {
-                        log.debug("event.getChannelId() = " + event.getChannelId());
-                        log.debug("event.getEvent().getChaincodeEvent().getPayload().toStringUtf8() = " + event.getEvent().getChaincodeEvent().getPayload().toStringUtf8());
-                        log.debug("event.getBlock().getData().getDataList().size() = " + event.getBlock().getData().getDataList().size());
+                        log.info("event.getChannelId() = " + event.getChannelId());
+                        log.info("event.getEvent().getChaincodeEvent().getPayload().toStringUtf8() = " + event.getEvent().getChaincodeEvent().getPayload().toStringUtf8());
+                        log.info("event.getBlock().getData().getDataList().size() = " + event.getBlock().getData().getDataList().size());
                         ByteString byteString = event.getBlock().getData().getData(0);
                         String result = byteString.toStringUtf8();
-                        log.debug("byteString.toStringUtf8() = " + result);
+                        log.info("byteString.toStringUtf8() = " + result);
 
                         String r1[] = result.split("END CERTIFICATE");
                         String rr = r1[2];
@@ -313,9 +314,9 @@ public class ChaincodeManager {
             } else {
                 String payload = proposalResponse.getProposalResponse().getResponse().getPayload().toStringUtf8();
                 log.info("payload:{}",payload);
-                log.debug("Install/Query payload from peer: " + proposalResponse.getPeer().getName());
-                log.debug("TransactionID: " + proposalResponse.getTransactionID());
-                log.debug("" + payload);
+                log.info("Install/Query payload from peer: " + proposalResponse.getPeer().getName());
+                log.info("TransactionID: " + proposalResponse.getTransactionID());
+                log.info("" + payload);
                 jsonObject = parseResult(payload);
                 jsonObject.put("code", 200);
                 jsonObject.put("txid", proposalResponse.getTransactionID());

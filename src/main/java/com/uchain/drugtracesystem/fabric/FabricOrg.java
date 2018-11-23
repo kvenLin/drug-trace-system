@@ -2,7 +2,7 @@ package com.uchain.drugtracesystem.fabric;
 
 import com.uchain.drugtracesystem.fabric.bean.Orderers;
 import com.uchain.drugtracesystem.fabric.bean.Peers;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.hyperledger.fabric.sdk.Peer;
 import org.hyperledger.fabric.sdk.User;
 import org.hyperledger.fabric_ca.sdk.HFCAClient;
@@ -20,9 +20,9 @@ import java.util.*;
  * 联盟组织对象
  *
  */
+@Slf4j
 class FabricOrg {
 
-    private static Logger log = Logger.getLogger(FabricConfig.class);
 
     /** 名称 */
     private String name;
@@ -76,8 +76,8 @@ class FabricOrg {
         File skFile = Paths.get(cryptoConfigPath, "/peerOrganizations/", peers.getOrgDomainName(), String.format("/users/Admin@%s/msp/keystore", peers.getOrgDomainName())).toFile();
         File certificateFile = Paths.get(cryptoConfigPath, "/peerOrganizations/", peers.getOrgDomainName(),
                 String.format("/users/Admin@%s/msp/signcerts/Admin@%s-cert.pem", peers.getOrgDomainName(), peers.getOrgDomainName())).toFile();
-        log.debug("skFile = " + skFile.getAbsolutePath());
-        log.debug("certificateFile = " + certificateFile.getAbsolutePath());
+        log.info("skFile = " + skFile.getAbsolutePath());
+        log.info("certificateFile = " + certificateFile.getAbsolutePath());
         setPeerAdmin(fabricStore.getMember(peers.getOrgName() + "Admin", peers.getOrgName(), peers.getOrgMSPID(), findFileSk(skFile), certificateFile)); // 一个特殊的用户，可以创建通道，连接对等点，并安装链码
     }
 
@@ -370,6 +370,7 @@ class FabricOrg {
     private File findFileSk(File directory) {
         File[] matches = directory.listFiles((dir, name) -> name.endsWith("_sk"));
         if (null == matches) {
+            log.error("not found path:{}",directory.getAbsolutePath());
             throw new RuntimeException(String.format("Matches returned null does %s directory exist?", directory.getAbsoluteFile().getName()));
         }
         if (matches.length != 1) {

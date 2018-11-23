@@ -9,6 +9,8 @@ import com.uchain.drugtracesystem.fabric.bean.Peers;
 import com.uchain.drugtracesystem.result.Result;
 import com.uchain.drugtracesystem.util.FabricMethod;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -17,6 +19,10 @@ import java.util.Date;
 @Slf4j
 public class FabricManagerTest {
 
+    //服务器通道文件路径
+    private String channelArtifactsPath = "/home/ubuntu/clf/drug-trace-system/fabric/channel-artifacts/";
+    //服务器证书文件路径
+    private String cryptoConfigPath = "/home/ubuntu/clf/drug-trace-system/fabric/crypto-config/";
 
     private ChaincodeManager registerManager;
 
@@ -77,10 +83,10 @@ public class FabricManagerTest {
         config.setPeers(getPeers());
         if (type==1){
             config.setChaincode(getChaincode(channelName, "register"
-                    , "github.com/hyperledger/fabric/imocc/chaincode/register/", version));
+                    , "github.com/hyperledger/fabric/aberic/chaincode/go/", version));
         }else {
             config.setChaincode(getChaincode(channelName, "drugTrace"
-                    , "github.com/hyperledger/fabric/imocc/chaincode/drugTrace/", version));
+                    , "github.com/hyperledger/fabric/aberic/chaincode/go/", version));
         }
         //加载通道配置文件
         config.setChannelArtifactsPath(getChannleArtifactsPath());
@@ -96,9 +102,9 @@ public class FabricManagerTest {
     private Orderers getOrderers() {
         Orderers orderer = new Orderers();
         //设置根域名和排序服务器对象
-        orderer.setOrdererDomainName("imocc.com");
+        orderer.setOrdererDomainName("example.com");
         //设置orderer节点名称和所在地址
-        orderer.addOrderer("orderer.imocc.com", "grpc://127.0.0.1:7050");
+        orderer.addOrderer("orderer.example.com", "grpc://39.108.86.64:7050");
         //orderer.addOrderer("orderer1.example.com", "grpc://127.0.0.1:8050");
 //        orderer.addOrderer("orderer2.example.com", "grpc://x.x.x.xxx:7050");
         return orderer;
@@ -116,10 +122,10 @@ public class FabricManagerTest {
         //设置组织的MSPID
         peers.setOrgMSPID("Org1MSP");
         //设置根域名
-        peers.setOrgDomainName("org1.imocc.com");
+        peers.setOrgDomainName("org1.example.com");
         //节点服务器对象（包含节点名称，节点事件监听名称，节点访问地址，节点事件监听访问地址，CA访问地址）
-        peers.addPeer("peer0.org1.imocc.com", "peer1.org1.imocc.com",
-                "grpc://127.0.0.1:27051", "grpc://127.0.0.1:27053", "http://127.0.0.1:7051");
+        peers.addPeer("peer0.org1.example.com", "peer0.org1.example.com",
+                "grpc://112.74.190.137:7051", "grpc://112.74.190.137:7052", "http://112.74.190.137:7052");
         return peers;
     }
 
@@ -154,11 +160,12 @@ public class FabricManagerTest {
      */
     private String getChannleArtifactsPath() {
         String directorys = FabricManagerTest.class.getClassLoader().getResource("fabric").getFile();
-        log.debug("directorys = " + directorys);
+        log.info("加载channel-artifacts的路径: directorys = " + directorys);
         File directory = new File(directorys);
-        log.debug("directory = " + directory.getPath());
+        log.info("加载Fabric配置tx文件的路径: directory = " + directory.getPath());
 
         return directory.getPath() + "/channel-artifacts/";
+//        return channelArtifactsPath;
     }
 
     /**
@@ -168,48 +175,49 @@ public class FabricManagerTest {
      */
     private String getCryptoConfigPath() {
         String directorys = FabricManagerTest.class.getClassLoader().getResource("fabric").getFile();
-        log.debug("directorys = " + directorys);
+        log.info("加载crypto-config的路径directorys = " + directorys);
         File directory = new File(directorys);
-        log.debug("directory = " + directory.getPath());
+        log.info("加载Fabric证书文件:directory = " + directory.getPath());
 
         return directory.getPath() + "/crypto-config/";
+//        return cryptoConfigPath;
     }
 
-    public static void main(String[] args) {
-        try {
-            //获取manager的实例
-//            ChaincodeManager registerManager = FabricManagerTest.obtain().getManager(1);
-//             String[] str = {"cb12e77d170ecc81617a9cebd3d7e9d04f3ea51e81b94ff59491d0374581b326"};
-//             JSONObject queryUser = registerManager.queryUser("queryTxInfo", str);
-//            Result result;
-//             System.out.println(queryUser);
-//          Result result = FabricMethod.login("201631063220","123456");
-//          User user = new User();
-//            user.setId("201631063220");
-//            user.setPassword("123456");
-//            result = FabricMethod.register(user);
-
-            //查询用户信息
-            Result result = FabricMethod.queryUser("201631063220");
-            //查询用户的操作历史记录
-            Result userHistory = FabricMethod.userHistory("201631063220");
-
-//            System.out.println("queryUser:"+queryUser);
-            System.out.println("userHistory:"+userHistory);
-
-            Date date = new Date(1540641593000L);
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            System.out.println(simpleDateFormat.format(date));
-
-
-            System.out.println("======================================================");
-            ChaincodeManager drugManager = FabricManagerTest.obtain().getManager(2);
-            String[] args1 = {"1","2"};
-            JSONObject testRangeQuery = drugManager.query("testRangeQuery", args1);
-            System.out.println("response info :"+testRangeQuery);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void main(String[] args) {
+//        try {
+//            //获取manager的实例
+////            ChaincodeManager registerManager = FabricManagerTest.obtain().getManager(1);
+////             String[] str = {"cb12e77d170ecc81617a9cebd3d7e9d04f3ea51e81b94ff59491d0374581b326"};
+////             JSONObject queryUser = registerManager.queryUser("queryTxInfo", str);
+////            Result result;
+////             System.out.println(queryUser);
+////          Result result = FabricMethod.login("201631063220","123456");
+////          User user = new User();
+////            user.setId("201631063220");
+////            user.setPassword("123456");
+////            result = FabricMethod.register(user);
+//
+//            //查询用户信息
+//            Result result = FabricMethod.queryUser("201631063220");
+//            //查询用户的操作历史记录
+//            Result userHistory = FabricMethod.userHistory("201631063220");
+//
+////            System.out.println("queryUser:"+queryUser);
+//            System.out.println("userHistory:"+userHistory);
+//
+//            Date date = new Date(1540641593000L);
+//            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//            System.out.println(simpleDateFormat.format(date));
+//
+//
+//            System.out.println("======================================================");
+//            ChaincodeManager drugManager = FabricManagerTest.obtain().getManager(2);
+//            String[] args1 = {"1","2"};
+//            JSONObject testRangeQuery = drugManager.query("testRangeQuery", args1);
+//            System.out.println("response info :"+testRangeQuery);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }
