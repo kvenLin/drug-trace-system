@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+###security###
+jwt:
+  secret: swpu-uchain
+  expiration: 1296000

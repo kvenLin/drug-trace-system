@@ -11,6 +11,7 @@ public class Drug {
     private String ownerId;
     private String name;
     private BigDecimal price;
+
     private String fileHash;
     private String description;
     private String buyer;

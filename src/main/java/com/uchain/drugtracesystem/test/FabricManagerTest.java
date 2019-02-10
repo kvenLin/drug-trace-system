@@ -206,7 +206,7 @@ public class FabricManagerTest {
             ChaincodeManager drugManager = FabricManagerTest.obtain().getManager(2);
             String[] args1 = {"1","2"};
             JSONObject testRangeQuery = drugManager.query("testRangeQuery", args1);
-            System.out.println("response info :"+testRangeQuery);
+            System.out.println("view info :"+testRangeQuery);
         } catch (Exception e) {
             e.printStackTrace();
         }

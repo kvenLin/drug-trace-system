@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.uchain.drugtracesystem.dao.ProductMapper" >
+  <resultMap id="BaseResultMap" type="com.uchain.drugtracesystem.model.domain.Product" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="sequence" property="sequence" jdbcType="INTEGER" />
+    <result column="batch" property="batch" jdbcType="INTEGER" />
+    <result column="drug_id" property="drugId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="exp" property="exp" jdbcType="TIMESTAMP" />
+    <result column="buyer_id" property="buyerId" jdbcType="BIGINT" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from product
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.uchain.drugtracesystem.model.domain.Product" >
+    insert into product (id, `sequence`, batch, 
+      drug_id, create_time, `exp`, 
+      buyer_id)
+    values (#{id,jdbcType=BIGINT}, #{sequence,jdbcType=INTEGER}, #{batch,jdbcType=INTEGER}, 
+      #{drugId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{exp,jdbcType=TIMESTAMP}, 
+      #{buyerId,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.uchain.drugtracesystem.model.domain.Product" >
+    update product
+    set `sequence` = #{sequence,jdbcType=INTEGER},
+      batch = #{batch,jdbcType=INTEGER},
+      drug_id = #{drugId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      `exp` = #{exp,jdbcType=TIMESTAMP},
+      buyer_id = #{buyerId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, `sequence`, batch, drug_id, create_time, `exp`, buyer_id
+    from product
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, `sequence`, batch, drug_id, create_time, `exp`, buyer_id
+    from product
+  </select>
+</mapper>
