@@ -7,8 +7,14 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum CodeMsg {
+    AUTHENTICATION_ERROR(401, "用户认证失败,请重新登录"),
+    PASSWORD_ERROR(402, "密码错误"),
+    PERMISSION_DENNY(403, "权限不足"),
     USER_NOT_EXIST(404,"当前用户不存在"),
-    PASSWORD_ERROR(403,"密码错误" ),
+    NOT_FOUND(404,"url错误,请求路径未找到" ),
+    REQUEST_METHOD_ERROR(550,"不支持%s的请求方式" ),
+    SERVER_ERROR(500,"服务器未知错误:%s" ),
+    BIND_ERROR(511,"参数校验错误:%s"),
     UN_KNOWN_FABRIC_ERROR(5000,"区块链未知错误" ),
     FABRIC_RESPONSE_ERROR(5001,"请求state返回数据异常" ),
     UN_KNOW_ERROR(500,"服务器位置错误"),

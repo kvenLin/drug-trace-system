@@ -192,21 +192,21 @@ public class FabricManagerTest {
             //查询用户信息
             Result result = FabricMethod.queryUser("201631063220");
             //查询用户的操作历史记录
-            Result userHistory = FabricMethod.userHistory("201631063220");
+//            Result userHistory = FabricMethod.userHistory("201631063220");
 
-//            System.out.println("queryUser:"+queryUser);
-            System.out.println("userHistory:"+userHistory);
-
-            Date date = new Date(1540641593000L);
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            System.out.println(simpleDateFormat.format(date));
+            System.out.println("queryUser:"+result);
+//            System.out.println("userHistory:"+userHistory);
+//
+//            Date date = new Date(1540641593000L);
+//            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//            System.out.println(simpleDateFormat.format(date));
 
 
             System.out.println("======================================================");
             ChaincodeManager drugManager = FabricManagerTest.obtain().getManager(2);
             String[] args1 = {"1","2"};
             JSONObject testRangeQuery = drugManager.query("testRangeQuery", args1);
-            System.out.println("response info :"+testRangeQuery);
+            System.out.println("view info :"+testRangeQuery);
         } catch (Exception e) {
             e.printStackTrace();
         }

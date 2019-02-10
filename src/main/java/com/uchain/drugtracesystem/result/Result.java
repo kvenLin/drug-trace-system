@@ -4,27 +4,29 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.uchain.drugtracesystem.enums.CodeMsg;
 import lombok.Data;
 
+/**
+ * 结果返回类封装
+ * @author clf
+ */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Result<T> {
     private Integer code;
-    private String message;
+    private String msg;
     private T data;
-
-    public Result() {
-    }
 
     private Result(T data) {
         this.code=0;
-        this.message ="success";
+        this.msg="success";
         this.data = data;
     }
 
     private Result(CodeMsg codeMsg) {
-        if (codeMsg==null)
+        if (codeMsg==null) {
             return;
+        }
         this.code = codeMsg.getCode();
-        this.message = codeMsg.getMsg();
+        this.msg = codeMsg.getMsg();
     }
 
     public static <T> Result<T> success(T data){
