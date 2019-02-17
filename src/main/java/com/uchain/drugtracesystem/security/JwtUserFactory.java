@@ -19,7 +19,7 @@ public class JwtUserFactory {
         return new JwtUser(
                 user.getUsername(),
                 user.getPassword(),
-                roleService.selectRoleByUserId(user.getId())
+                roleService.getUserRoleValues(user.getId())
         );
     }
 }

@@ -1,6 +1,5 @@
 package com.uchain.drugtracesystem.service;
 
-import com.uchain.drugtracesystem.result.Result;
 
 /**
  * @Author: clf

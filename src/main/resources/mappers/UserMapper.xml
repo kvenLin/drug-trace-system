@@ -39,4 +39,9 @@
     select id, username, `password`, balance, point, create_time
     from user
   </select>
+  <select id="selectByUsername" resultMap="BaseResultMap">
+    select id, username, `password`, balance, point, create_time
+    from user
+    where username = #{username}
+  </select>
 </mapper>
