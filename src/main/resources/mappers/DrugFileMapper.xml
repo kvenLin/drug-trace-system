@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.uchain.drugtracesystem.dao.DrugFileMapper" >
+  <resultMap id="BaseResultMap" type="com.uchain.drugtracesystem.model.domain.DrugFile" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="hash" property="hash" jdbcType="VARCHAR" />
+    <result column="uploaded_by" property="uploadedBy" jdbcType="BIGINT" />
+    <result column="drug_id" property="drugId" jdbcType="BIGINT" />
+    <result column="upload_time" property="uploadTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from drug_file
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.uchain.drugtracesystem.model.domain.DrugFile" >
+    insert into drug_file (id, `name`, `path`, 
+      hash, uploaded_by, drug_id, 
+      upload_time)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, 
+      #{hash,jdbcType=VARCHAR}, #{uploadedBy,jdbcType=BIGINT}, #{drugId,jdbcType=BIGINT}, 
+      #{uploadTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.uchain.drugtracesystem.model.domain.DrugFile" >
+    update drug_file
+    set `name` = #{name,jdbcType=VARCHAR},
+      `path` = #{path,jdbcType=VARCHAR},
+      hash = #{hash,jdbcType=VARCHAR},
+      uploaded_by = #{uploadedBy,jdbcType=BIGINT},
+      drug_id = #{drugId,jdbcType=BIGINT},
+      upload_time = #{uploadTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, `name`, `path`, hash, uploaded_by, drug_id, upload_time
+    from drug_file
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, `name`, `path`, hash, uploaded_by, drug_id, upload_time
+    from drug_file
+  </select>
+</mapper>
