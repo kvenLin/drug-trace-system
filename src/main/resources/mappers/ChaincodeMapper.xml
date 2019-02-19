@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.uchain.drugtracesystem.dao.ChaincodeMapper" >
+  <resultMap id="BaseResultMap" type="com.uchain.drugtracesystem.model.domain.Chaincode" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="channel_name" property="channelName" jdbcType="VARCHAR" />
+    <result column="chaincode_name" property="chaincodeName" jdbcType="VARCHAR" />
+    <result column="chaincode_path" property="chaincodePath" jdbcType="VARCHAR" />
+    <result column="chaincode_version" property="chaincodeVersion" jdbcType="VARCHAR" />
+    <result column="invoke_wait_time" property="invokeWaitTime" jdbcType="INTEGER" />
+    <result column="deploy_wait_time" property="deployWaitTime" jdbcType="INTEGER" />
+    <result column="created_by" property="createdBy" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="VOResultMap" type="com.uchain.drugtracesystem.model.VO.ChaincodeVO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="channel_name" property="channelName" jdbcType="VARCHAR" />
+    <result column="chaincode_name" property="chaincodeName" jdbcType="VARCHAR" />
+    <result column="chaincode_path" property="chaincodePath" jdbcType="VARCHAR" />
+    <result column="chaincode_version" property="chaincodeVersion" jdbcType="VARCHAR" />
+    <result column="invoke_wait_time" property="invokeWaitTime" jdbcType="INTEGER" />
+    <result column="deploy_wait_time" property="deployWaitTime" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from chaincode
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.uchain.drugtracesystem.model.domain.Chaincode" >
+    insert into chaincode (id, channel_name, chaincode_name, 
+      chaincode_path, chaincode_version, invoke_wait_time, 
+      deploy_wait_time, created_by)
+    values (#{id,jdbcType=BIGINT}, #{channelName,jdbcType=VARCHAR}, #{chaincodeName,jdbcType=VARCHAR}, 
+      #{chaincodePath,jdbcType=VARCHAR}, #{chaincodeVersion,jdbcType=VARCHAR}, #{invokeWaitTime,jdbcType=INTEGER}, 
+      #{deployWaitTime,jdbcType=INTEGER}, #{createdBy,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.uchain.drugtracesystem.model.domain.Chaincode" >
+    update chaincode
+    set channel_name = #{channelName,jdbcType=VARCHAR},
+      chaincode_name = #{chaincodeName,jdbcType=VARCHAR},
+      chaincode_path = #{chaincodePath,jdbcType=VARCHAR},
+      chaincode_version = #{chaincodeVersion,jdbcType=VARCHAR},
+      invoke_wait_time = #{invokeWaitTime,jdbcType=INTEGER},
+      deploy_wait_time = #{deployWaitTime,jdbcType=INTEGER},
+      created_by = #{createdBy,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, channel_name, chaincode_name, chaincode_path, chaincode_version, invoke_wait_time, 
+    deploy_wait_time, created_by
+    from chaincode
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="VOResultMap" >
+    select chaincode.id, chaincode.channel_name, chaincode.chaincode_name, chaincode.chaincode_path,
+    chaincode.chaincode_version, chaincode.invoke_wait_time, chaincode.deploy_wait_time, user.username
+    from chaincode inner join user on chaincode.created_by = user.id
+  </select>
+</mapper>

@@ -43,4 +43,10 @@ public interface UserService {
      * @return
      */
     Result register(RegisterRequest request);
+
+    /**
+     * 获取当前的用户信息
+     * @return
+     */
+    User getCurrentUser();
 }
