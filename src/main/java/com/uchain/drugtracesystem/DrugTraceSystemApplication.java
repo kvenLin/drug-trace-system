@@ -9,7 +9,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 @EnableSwagger2
 @Configuration
-@MapperScan("com.swpu.uchain.openexperiment.dao")
+@MapperScan("com.uchain.drugtracesystem.dao")
 public class DrugTraceSystemApplication {
 
     public static void main(String[] args) {
