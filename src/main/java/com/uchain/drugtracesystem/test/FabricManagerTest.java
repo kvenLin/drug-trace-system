@@ -11,8 +11,6 @@ import com.uchain.drugtracesystem.util.FabricMethod;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Slf4j
 public class FabricManagerTest {

@@ -1,8 +1,10 @@
 package com.uchain.drugtracesystem.controller;
 
 import com.uchain.drugtracesystem.model.view.JwtAuthenticationRequest;
+import com.uchain.drugtracesystem.model.view.RegisterRequest;
 import com.uchain.drugtracesystem.service.AuthService;
 import com.uchain.drugtracesystem.service.UserService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import javax.validation.Valid;
  * @Date: 19-2-10
  * @Description:
  */
+@Api(tags = "匿名访问接口")
 @Slf4j
 @CrossOrigin
 @RequestMapping
@@ -33,6 +36,13 @@ public class AnonController {
     public Object login(@Valid JwtAuthenticationRequest request){
         return authService.login(request.getUsername(), request.getPassword());
     }
+
+    @PostMapping("/register")
+    @ApiOperation("注册接口")
+    public Object register(@Valid RegisterRequest request){
+        return userService.register(request);
+    }
+
 
 }
 

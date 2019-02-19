@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.uchain.drugtracesystem.dao.PeerMapper" >
+  <resultMap id="BaseResultMap" type="com.uchain.drugtracesystem.model.domain.Peer" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="peer_name" property="peerName" jdbcType="VARCHAR" />
+    <result column="peer_event_hub_name" property="peerEventHubName" jdbcType="VARCHAR" />
+    <result column="peer_location" property="peerLocation" jdbcType="VARCHAR" />
+    <result column="peer_event_hub_location" property="peerEventHubLocation" jdbcType="VARCHAR" />
+    <result column="ca_location" property="caLocation" jdbcType="VARCHAR" />
+    <result column="add_event_hub" property="addEventHub" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from peer
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.uchain.drugtracesystem.model.domain.Peer" >
+    insert into peer (id, peer_name, peer_event_hub_name, 
+      peer_location, peer_event_hub_location, ca_location, 
+      add_event_hub)
+    values (#{id,jdbcType=BIGINT}, #{peerName,jdbcType=VARCHAR}, #{peerEventHubName,jdbcType=VARCHAR}, 
+      #{peerLocation,jdbcType=VARCHAR}, #{peerEventHubLocation,jdbcType=VARCHAR}, #{caLocation,jdbcType=VARCHAR}, 
+      #{addEventHub,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.uchain.drugtracesystem.model.domain.Peer" >
+    update peer
+    set peer_name = #{peerName,jdbcType=VARCHAR},
+      peer_event_hub_name = #{peerEventHubName,jdbcType=VARCHAR},
+      peer_location = #{peerLocation,jdbcType=VARCHAR},
+      peer_event_hub_location = #{peerEventHubLocation,jdbcType=VARCHAR},
+      ca_location = #{caLocation,jdbcType=VARCHAR},
+      add_event_hub = #{addEventHub,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, peer_name, peer_event_hub_name, peer_location, peer_event_hub_location, 
+    ca_location, add_event_hub
+    from peer
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, peer_name, peer_event_hub_name, peer_location, peer_event_hub_location, 
+    ca_location, add_event_hub
+    from peer
+  </select>
+</mapper>

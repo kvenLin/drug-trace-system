@@ -31,4 +31,9 @@
     select id, `value`, code
     from role
   </select>
+  <select id="selectRoleValuesByUserId" resultMap="BaseResultMap">
+    select `value`
+    from role
+    where role.user_id = #{userId}
+  </select>
 </mapper>

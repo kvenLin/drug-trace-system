@@ -3,6 +3,7 @@ package com.uchain.drugtracesystem.result;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.uchain.drugtracesystem.enums.CodeMsg;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 结果返回类封装
@@ -10,6 +11,7 @@ import lombok.Data;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@NoArgsConstructor
 public class Result<T> {
     private Integer code;
     private String msg;

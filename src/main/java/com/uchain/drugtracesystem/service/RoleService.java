@@ -13,5 +13,5 @@ public interface RoleService {
      * @param userId
      * @return
      */
-    List<String> selectRoleByUserId(Long userId);
+    List<String> getUserRoleValues(Long userId);
 }

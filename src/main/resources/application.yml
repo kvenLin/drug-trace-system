@@ -7,3 +7,7 @@ spring:
 jwt:
   secret: swpu-uchain
   expiration: 1296000
+###fabric-config###
+fabric:
+  channel-name: mychannel
+  version: 1.0.0

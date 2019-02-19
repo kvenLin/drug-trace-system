@@ -7,6 +7,8 @@ public class Drug implements Serializable {
 
     private String address;
 
+    private Long price;
+
     private String name;
 
     private String description;
@@ -27,6 +29,14 @@ public class Drug implements Serializable {
 
     public void setAddress(String address) {
         this.address = address == null ? null : address.trim();
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
     }
 
     public String getName() {
@@ -53,6 +63,7 @@ public class Drug implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", address=").append(address);
+        sb.append(", price=").append(price);
         sb.append(", name=").append(name);
         sb.append(", description=").append(description);
         sb.append(", serialVersionUID=").append(serialVersionUID);

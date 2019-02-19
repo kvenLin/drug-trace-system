@@ -33,7 +33,7 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException(String.format(" user not exist with stuId ='%s'.", username));
         } else {
             //若存在则返回userDetails对象
-            List<String> roles = roleService.selectRoleByUserId(user.getId());
+            List<String> roles = roleService.getUserRoleValues(user.getId());
             return new JwtUser(username, passwordEncoder.encode(user.getPassword()), roles);
         }
     }
