@@ -101,7 +101,7 @@ public class FabricConfigServiceImpl implements FabricConfigService {
     }
 
     @Override
-    public Result addChainCode(ChaincodeForm chaincodeForm) {
+    public Result addChaincode(ChaincodeForm chaincodeForm) {
         Chaincode chaincode = new Chaincode();
         BeanUtils.copyProperties(chaincodeForm, chaincode);
         User user = userService.getCurrentUser();
@@ -110,6 +110,11 @@ public class FabricConfigServiceImpl implements FabricConfigService {
             return Result.success();
         }
         return Result.error(CodeMsg.ADD_ERROR);
+    }
+
+    @Override
+    public Chaincode selectByChaincodeName(String chaincodeName) {
+        return chaincodeMapper.selectByChaincodeName(chaincodeName);
     }
 
     @Override

@@ -73,7 +73,7 @@ public class FabricController {
 
     @PostMapping("/addChaincode")
     public Object addChaincode(@Valid ChaincodeForm chaincodeForm){
-        return fabricConfigService.addChainCode(chaincodeForm);
+        return fabricConfigService.addChaincode(chaincodeForm);
     }
 
     @PostMapping("/deleteChaincode")

@@ -11,3 +11,7 @@ jwt:
 fabric:
   channel-name: mychannel
   version: 1.0.0
+  orderer-domain-name: imocc.com
+  org-name: Org1
+  org-msp-id: Org1MSP
+  org-domain-name: org1.imocc.com

@@ -55,4 +55,9 @@
     chaincode.chaincode_version, chaincode.invoke_wait_time, chaincode.deploy_wait_time, user.username
     from chaincode inner join user on chaincode.created_by = user.id
   </select>
+  <select id="selectByChaincodeName" resultMap="BaseResultMap">
+    select id, channel_name, chaincode_name, chaincode_path, chaincode_version, invoke_wait_time,
+    deploy_wait_time, created_by
+    where chaincode_name = #{chaincodeName}
+  </select>
 </mapper>

@@ -68,8 +68,8 @@ public class ChaincodeManager {
         fabricOrg = getFabricOrg();
         channel = getChannel();
         chaincodeID = getChaincodeID();
-
-        client.setUserContext(fabricOrg.getPeerAdmin()); // 也许是1.0.0测试版的bug，只有节点管理员可以调用链码
+        // 也许是1.0.0测试版的bug，只有节点管理员可以调用链码
+        client.setUserContext(fabricOrg.getPeerAdmin());
     }
 
     /**
