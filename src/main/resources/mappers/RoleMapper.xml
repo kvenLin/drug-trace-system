@@ -1,34 +1,34 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.uchain.drugtracesystem.dao.RoleMapper" >
-  <resultMap id="BaseResultMap" type="com.uchain.drugtracesystem.model.domain.Role" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="value" property="value" jdbcType="VARCHAR" />
-    <result column="code" property="code" jdbcType="INTEGER" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uchain.drugtracesystem.dao.RoleMapper">
+  <resultMap id="BaseResultMap" type="com.uchain.drugtracesystem.model.domain.Role">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
   </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from role
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.uchain.drugtracesystem.model.domain.Role" >
-    insert into role (id, `value`, code
+  <insert id="insert" parameterType="com.uchain.drugtracesystem.model.domain.Role">
+    insert into role (id, `value`, `name`
       )
-    values (#{id,jdbcType=BIGINT}, #{value,jdbcType=VARCHAR}, #{code,jdbcType=INTEGER}
+    values (#{id,jdbcType=BIGINT}, #{value,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}
       )
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.uchain.drugtracesystem.model.domain.Role" >
+  <update id="updateByPrimaryKey" parameterType="com.uchain.drugtracesystem.model.domain.Role">
     update role
     set `value` = #{value,jdbcType=VARCHAR},
-      code = #{code,jdbcType=INTEGER}
+      `name` = #{name,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, `value`, code
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, `value`, `name`
     from role
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap" >
-    select id, `value`, code
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, `value`, `name`
     from role
   </select>
   <select id="selectRoleValuesByUserId" resultMap="BaseResultMap">

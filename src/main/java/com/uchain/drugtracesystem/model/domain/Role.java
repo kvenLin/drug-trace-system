@@ -7,7 +7,7 @@ public class Role implements Serializable {
 
     private String value;
 
-    private Integer code;
+    private String name;
 
     private static final long serialVersionUID = 1L;
 
@@ -27,12 +27,12 @@ public class Role implements Serializable {
         this.value = value == null ? null : value.trim();
     }
 
-    public Integer getCode() {
-        return code;
+    public String getName() {
+        return name;
     }
 
-    public void setCode(Integer code) {
-        this.code = code;
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
     }
 
     @Override
@@ -43,7 +43,7 @@ public class Role implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", value=").append(value);
-        sb.append(", code=").append(code);
+        sb.append(", name=").append(name);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
