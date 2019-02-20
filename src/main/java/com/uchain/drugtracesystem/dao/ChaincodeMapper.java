@@ -14,4 +14,6 @@ public interface ChaincodeMapper {
     List<ChaincodeVO> selectAll();
 
     int updateByPrimaryKey(Chaincode record);
+
+    Chaincode selectByChaincodeName(String chaincodeName);
 }
