@@ -2,6 +2,7 @@ package com.uchain.drugtracesystem.service.impl;
 
 import com.uchain.drugtracesystem.dao.UserMapper;
 import com.uchain.drugtracesystem.enums.CodeMsg;
+import com.uchain.drugtracesystem.fabric.ChaincodeManager;
 import com.uchain.drugtracesystem.model.domain.User;
 import com.uchain.drugtracesystem.model.view.RegisterRequest;
 import com.uchain.drugtracesystem.result.Result;

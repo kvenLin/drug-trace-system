@@ -18,5 +18,5 @@ public class ManagerConfig {
     private String ordererDomainName;
     private String orgName;
     private String orgMspId;
-    private String orgDoaminName;
+    private String orgDomainName;
 }
