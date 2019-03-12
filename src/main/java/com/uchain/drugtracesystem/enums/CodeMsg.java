@@ -27,6 +27,8 @@ public enum CodeMsg {
     CHAINCODE_NOT_EXIST(513, "链码不存在"),
     ORDERER_NOT_EXIST(514, "当前排序节点不存在"),
     PEER_NOT_EXIST(515, "peer节点不存在"),
+    CHAINCODE_ALREADY_EXIST(516, "链码已存在,链码名重复"),
+    CONFIG_CHAINCODE_MANAGER_ERROR(517, "装配链码管理器异常"),
     UN_KNOWN_FABRIC_ERROR(5000, "区块链未知错误" ),
     FABRIC_RESPONSE_ERROR(5001,"请求state返回数据异常" );
 
