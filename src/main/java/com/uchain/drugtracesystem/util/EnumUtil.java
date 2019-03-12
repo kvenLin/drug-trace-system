@@ -18,9 +18,9 @@ public class EnumUtil {
             case 501:
                 return Result.error(CodeMsg.USER_ALREADY_EXIST);
             case 502:
-                return result.error(CodeMsg.DRUG_ALREADY_EXIST);
+                return Result.error(CodeMsg.DRUG_ALREADY_EXIST);
             case 503:
-                return result.error(CodeMsg.DRUG_DO_NOT_EXIST);
+                return Result.error(CodeMsg.DRUG_DO_NOT_EXIST);
             case 504:
                 return Result.error(CodeMsg.TRANS_MONEY_ERROR);
             default:

@@ -102,7 +102,11 @@ public class FabricConfigServiceImpl implements FabricConfigService {
 
     @Override
     public Result addChaincode(ChaincodeForm chaincodeForm) {
-        Chaincode chaincode = new Chaincode();
+        Chaincode chaincode = selectByChaincodeName(chaincodeForm.getChaincodeName());
+        if (chaincode != null){
+            return Result.error(CodeMsg.CHAINCODE_ALREADY_EXIST);
+        }
+        chaincode = new Chaincode();
         BeanUtils.copyProperties(chaincodeForm, chaincode);
         User user = userService.getCurrentUser();
         chaincode.setCreatedBy(user.getId());
